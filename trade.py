@@ -71,6 +71,9 @@ def prepareAndSendMessage():
     threading.Timer(900.0,prepareAndSendMessage).start()
             
 threading.Timer(0.0,prepareAndSendMessage).start()
+@app.route("/")
+def index():
+    prepareAndSendMessage()
 if __name__ == '__main__':
     try:
         port = int(sys.argv[1])
