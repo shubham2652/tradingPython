@@ -9,7 +9,7 @@ colorama==0.4.3
 cycler==0.10.0
 cymem==2.0.3
 docx2txt==0.8
-en-core-web-sm==2.2.5
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz#egg=en_core_web_sm
 Flask==1.1.1
 gunicorn==20.0.4
 idna==2.8
