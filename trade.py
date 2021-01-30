@@ -79,7 +79,7 @@ threading.Timer(0.0,prepareAndSendMessage).start()
 def index():
     prepareAndSendMessage()
     return "Successfull"
-@app.route("/)
+@app.route("/")
 def croneJobs():
     return "crone job started"
 
