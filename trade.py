@@ -7,24 +7,28 @@ from bs4 import BeautifulSoup
 app = Flask(__name__)
 global bot_token
 global bot_chatId
+global fiveStarBuy
+global fourStarBuy
+global threeStarBuy
+global twoStarBuy
+fiveStarBuy = {
+    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close > latest vwap and [ -3 ] 5 minute close <= 1 day ago  vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) ) '
+}
+fourStarBuy = {
+    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close >= latest vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) )  '
+}
+threeStarBuy = {
+    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and [-2] 5 minute close >= latest vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 3 ) ) '
+}
+twoStarBuy = {
+    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest volume > 200000 ) ) '
+}
+
 bot_token='1667142589:AAGl2z7xxmTDI9E891ZiTiRu1U9hgF1NUg8'
 bot_chatId='456331112'
 def prepareAndSendMessage():
     link = "https://chartink.com/screener/3-continuous-green-candle"
     url = 'https://chartink.com/screener/process'
-    fiveStarBuy = {
-        'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close > latest vwap and [ -3 ] 5 minute close <= 1 day ago  vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) ) '
-    }
-    fourStarBuy = {
-        'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close >= latest vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) )  '
-    }
-    threeStarBuy = {
-        'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and [-2] 5 minute close >= latest vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 3 ) ) '
-    }
-    twoStarBuy = {
-        'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest volume > 200000 ) ) '
-    }
-
     with requests.Session() as s:
         r = s.get(link)
         soup = BeautifulSoup(r.text,"html.parser")
@@ -71,9 +75,14 @@ def prepareAndSendMessage():
     threading.Timer(900.0,prepareAndSendMessage).start()
             
 threading.Timer(0.0,prepareAndSendMessage).start()
-@app.route("/")
+@app.route("/trade")
 def index():
     prepareAndSendMessage()
+    return "Successfull"
+@app.route("/)
+def croneJobs():
+    return "crone job started"
+
 if __name__ == '__main__':
     try:
         port = int(sys.argv[1])
