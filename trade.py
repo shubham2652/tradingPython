@@ -29,49 +29,12 @@ bot_chatId='456331112'
 def prepareAndSendMessage():
     link = "https://chartink.com/screener/3-continuous-green-candle"
     url = 'https://chartink.com/screener/process'
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=fiveStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 5-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
-
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=fourStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 4-STAR **** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
-
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=threeStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 3-STAR *** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
-
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=twoStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 2-STAR ** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
+    
+    sessionProcess(link, url, fiveStarBuy, str(5), "BUY")
+    sessionProcess(link, url, fourStarBuy, str(4), "BUY")
+    sessionProcess(link, url, threeStarBuy, str(3), "BUY")
+    sessionProcess(link, url, twoStarBuy, str(2), "BUY")
+    
     threading.Timer(900.0,prepareAndSendMessage).start()
             
 threading.Timer(0.0,prepareAndSendMessage).start()
@@ -83,6 +46,17 @@ def index():
 def croneJobs():
     return "crone job started"
 
+def sessionProcess(link, url, payload, weight, call):
+    with requests.Session() as s:
+        r = s.get(link)
+        soup = BeautifulSoup(r.text,"html.parser")
+        csrf = soup.select_one("[name='csrf-token']")['content']
+        s.headers['x-csrf-token'] = csrf
+        r = s.post(url,data=payload)
+        for item in r.json()['data']:
+            bot_message = call + weight + "-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
+            requests.get(send_text)
 if __name__ == '__main__':
     try:
         port = int(sys.argv[1])
