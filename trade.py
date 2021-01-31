@@ -26,6 +26,18 @@ twoStarBuy = {
 
 bot_token='1667142589:AAGl2z7xxmTDI9E891ZiTiRu1U9hgF1NUg8'
 bot_chatId='456331112'
+
+def sessionProcess(link, url, payload, weight, call):
+    with requests.Session() as s:
+        r = s.get(link)
+        soup = BeautifulSoup(r.text,"html.parser")
+        csrf = soup.select_one("[name='csrf-token']")['content']
+        s.headers['x-csrf-token'] = csrf
+        r = s.post(url,data=payload)
+        for item in r.json()['data']:
+            bot_message = call + weight + "-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
+            requests.get(send_text)
 def prepareAndSendMessage():
     link = "https://chartink.com/screener/3-continuous-green-candle"
     url = 'https://chartink.com/screener/process'
@@ -45,18 +57,6 @@ def index():
 @app.route("/")
 def croneJobs():
     return "crone job started"
-
-def sessionProcess(link, url, payload, weight, call):
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=payload)
-        for item in r.json()['data']:
-            bot_message = call + weight + "-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
 if __name__ == '__main__':
     try:
         port = int(sys.argv[1])
