@@ -36,6 +36,7 @@ def sessionProcess(link, url, payload, weight, call):
         r = s.post(url,data=payload)
         for item in r.json()['data']:
             bot_message = call + weight + "-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
+            print("BOT Message",bot_message)
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
             requests.get(send_text)
 def prepareAndSendMessage():
