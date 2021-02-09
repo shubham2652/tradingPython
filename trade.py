@@ -15,16 +15,7 @@ global fourStarSell
 global threeStarSell
 global twoStarSell
 fiveStarBuy = {
-    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close > latest vwap and [ -3 ] 5 minute close <= 1 day ago  vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) ) '
-}
-fourStarBuy = {
-    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close >= latest vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) )  '
-}
-threeStarBuy = {
-    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and [-2] 5 minute close >= latest vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 3 ) ) '
-}
-twoStarBuy = {
-    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest volume > 200000 ) ) '
+    'scan_clause': '( {cash} ( latest close > 250 and latest volume > 250000 and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 2 and latest supertrend( 7 , 3 ) < latest close and 1 day ago  supertrend( 7 , 3 ) >= 1 day ago  close and latest ema( latest close , 9 ) >= latest ema( latest close , 55 ) and latest ema( latest close , 9 ) < latest close ) ) '
 }
 fiveStarSell = {
     'scan_clause': '( {cash} ( [0] 5 minute close < [0] 5 minute open and [-1] 5 minute close < [-1] 5 minute open and [-2] 5 minute close < [-2] 5 minute open and [0] 5 minute high < [-1] 5 minute close and latest close > 100 and latest volume > 200000 and latest close < latest vwap and 1 day ago  close >= 1 day ago  vwap and latest close <= latest sma( latest close , 200 ) and latest close <= latest ema( latest close , 9 ) ) ) '
@@ -51,36 +42,6 @@ def prepareAndSendMessage():
         r = s.post(url,data=fiveStarBuy)
         for item in r.json()['data']:
             bot_message = "Buy 5-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=fourStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 4-STAR **** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=threeStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 3-STAR *** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
-            requests.get(send_text)
-    with requests.Session() as s:
-        r = s.get(link)
-        soup = BeautifulSoup(r.text,"html.parser")
-        csrf = soup.select_one("[name='csrf-token']")['content']
-        s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=twoStarBuy)
-        for item in r.json()['data']:
-            bot_message = "Buy 2-STAR ** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
             requests.get(send_text)
             
