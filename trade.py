@@ -15,7 +15,7 @@ global fourStarSell
 global threeStarSell
 global twoStarSell
 fiveStarBuy = {
-    'scan_clause': '( {cash} ( latest close > 250 and latest volume > 250000 and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 2 and latest supertrend( 7 , 3 ) < latest close and 1 day ago  supertrend( 7 , 3 ) >= 1 day ago  close and latest ema( latest close , 9 ) >= latest ema( latest close , 55 ) and latest ema( latest close , 9 ) < latest close ) ) '
+    'scan_clause': '( {cash} ( latest close > 250 and latest volume > 250000 and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 2 and latest supertrend( 7 , 3 ) < latest close and 1 day ago  supertrend( 7 , 3 ) <= 1 day ago  close and latest ema( latest close , 9 ) >= latest ema( latest close , 55 ) and latest ema( latest close , 9 ) < latest close ) ) '
 }
 fiveStarSell = {
     'scan_clause': '( {cash} ( [0] 5 minute close < [0] 5 minute open and [-1] 5 minute close < [-1] 5 minute open and [-2] 5 minute close < [-2] 5 minute open and [0] 5 minute high < [-1] 5 minute close and latest close > 100 and latest volume > 200000 and latest close < latest vwap and 1 day ago  close >= 1 day ago  vwap and latest close <= latest sma( latest close , 200 ) and latest close <= latest ema( latest close , 9 ) ) ) '
