@@ -6,15 +6,12 @@ from bs4 import BeautifulSoup
 app = Flask(__name__)
 global bot_token
 global bot_chatId
-global fiveStarBuy
-global fourStarBuy
-global threeStarBuy
-global twoStarBuy
+global buy
 global fiveStarSell
 global fourStarSell
 global threeStarSell
 global twoStarSell
-fiveStarBuy = {
+buy = {
     'scan_clause': '( {cash} ( latest close >= latest ema( latest close , 200 ) and [0] 10 minute macd line( 26,12,9 ) > [0] 10 minute macd signal( 26,12,9 ) and [ -1 ] 10 minute macd line( 26,12,9 ) <= [ -1 ] 10 minute macd signal( 26,12,9 ) and [0] 30 minute ema( [0] 30 minute close , 200 ) >= latest ema( latest close , 200 ) and latest volume >= 200000 and latest close >= latest ema( latest close , 9 ) ) )'
 }
 fiveStarSell = {
@@ -39,7 +36,7 @@ def prepareAndSendMessage():
         soup = BeautifulSoup(r.text,"html.parser")
         csrf = soup.select_one("[name='csrf-token']")['content']
         s.headers['x-csrf-token'] = csrf
-        r = s.post(url,data=fiveStarBuy)
+        r = s.post(url,data=buy)
         for item in r.json()['data']:
             bot_message = "Buy 5-STAR ***** \n" + item['name'] + "\n" + item['nsecode'] + "\n" + str(item['per_chg']) + "\n" + str(item['close']) + "\n" + str(item['volume'])
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatId + '&parse_mode=Markdown&text=' + bot_message
