@@ -15,7 +15,7 @@ global fourStarSell
 global threeStarSell
 global twoStarSell
 fiveStarBuy = {
-    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close > latest vwap and [ -3 ] 5 minute close <= 1 day ago  vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) ) '
+    'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close > latest vwap and [ -3 ] 5 minute close <= 1 day ago  vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) )'
 }
 fourStarBuy = {
     'scan_clause': '( {cash} ( latest close >= latest ema( latest close , 200 ) and [0] 10 minute macd line( 26,12,9 ) > [0] 10 minute macd signal( 26,12,9 ) and [ -1 ] 10 minute macd line( 26,12,9 ) <= [ -1 ] 10 minute macd signal( 26,12,9 ) and [0] 30 minute ema( [0] 30 minute close , 200 ) >= latest ema( latest close , 200 ) and latest volume >= 200000 and latest close >= latest ema( latest close , 9 ) ) )'
