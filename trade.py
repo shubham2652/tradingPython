@@ -18,7 +18,7 @@ fiveStarBuy = {
     'scan_clause': '( {cash} ( [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [-2] 5 minute close > [-2] 5 minute open and [0] 5 minute close > [-1] 5 minute high and latest close > 100 and latest volume > 200000 and [-2] 5 minute close > latest vwap and [ -3 ] 5 minute close <= 1 day ago  vwap and latest close >= latest sma( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) ) )'
 }
 fourStarBuy = {
-    'scan_clause': '( {cash} ( ( {cash} ( latest close >= latest ema( latest close , 200 ) and [0] 10 minute macd line( 26,12,9 ) > [0] 10 minute macd signal( 26,12,9 ) and [ -1 ] 10 minute macd line( 26,12,9 ) <= [ -1 ] 10 minute macd signal( 26,12,9 ) and [0] 30 minute ema( [0] 30 minute close , 200 ) >= latest ema( latest close , 200 ) and latest volume >= 200000 and latest close >= latest ema( latest close , 9 ) and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 2 ) ) ) ) '
+    'scan_clause': '( {cash} ( latest macd line( 26,12,9 ) > latest macd signal( 26,12,9 ) and 1 day ago  macd line( 26,12,9 ) <= 1 day ago  macd signal( 26,12,9 ) and latest ema( latest close , 9 ) >= latest ema( latest close , 200 ) and latest close >= latest ema( latest close , 9 ) and latest close >= 250 ) ) '
 }
 threeStarBuy = {
     'scan_clause': '( {cash} ( latest close > 250 and latest volume > 250000 and latest "close - 1 candle ago close / 1 candle ago close * 100" >= 2 and latest supertrend( 7 , 3 ) < latest close and 1 day ago  supertrend( 7 , 3 ) <= 1 day ago  close and latest ema( latest close , 9 ) >= latest ema( latest close , 55 ) and latest ema( latest close , 9 ) < latest close ) ) '
